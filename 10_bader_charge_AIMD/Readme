@@ -1,0 +1,43 @@
+You can separate into Water_layer, Surface_layer, and Averaged_layer
+It depend on the files 1,2,3,4,5,6... the bader charge POSCAR.
+If the proton is on the surface or the proton is within the water layer, or these two situations are mixed.
+
+##################################################################
+The files we need here is:
+The 1,2,3,4,5,6,7,8,9,10 files:
+Inside you should have the *dat* file resulted from bader analysis;
+ACF.dat
+AVF.dat
+BCF.dat 
+
+CONTCAR
+
+#################################################################
+The command that we need to perform:
+First:
+./SUBMIT_JOBS_1.sh > LOG
+
+Second:
+./connected_bader_togather_2.sh
+
+#################################################################
+We need to modify some parameters for the bader_diff_blocks.sh
+#Building blocks name and num atom
+echo "MXeneupHalf,WaterProton,MXeneloHalf" > B_name_temp
+B_name_t=(`echo $(grep "," B_name_temp)`)
+B_name=`echo ${B_name_t[@]} | sed 's/,/","/g'`
+B_num=(64,38,48)
+
+We need to modify some parameters for the connected_bader_togather_2.sh
+#Building blocks name and num atom
+echo "MxeneloHalf,WaterProtonLo,MXeneupHalf" > B_name_temp
+B_name_t=(`echo $(grep "," B_name_temp)`)
+B_name=`echo ${B_name_t[@]} | sed 's/,/","/g'`
+
+#This is the example of the MXene-MXene system (different buidling blocks)
+#You can modify by yourself.
+
+
+
+
+

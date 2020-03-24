@@ -1,0 +1,30 @@
+This script deals with grabing the proton bonded oxygen coordinations here.
+We have separated the diffusion coefficient into the xy-palne, z-dir and total.
+
+The files we need is Final_O_uporder_list_Final from 4, and XDATCAR & POSCAR from 2
+
+##################################################################
+The command that we need to perform:
+sbatch Submit.run
+[Inside there you need to define the steps you need to deduct from your trajectory]
+[After this finished]
+
+cd xy_plane_MSD
+sbatch Submit.run
+
+##################################################################
+We need to modify something in the Submit_first.run:
+#The former steps we need to cut from our SDATCAR file
+needed_step=`echo 15000`
+
+The parameters we need to set to the following files:
+graping_two_proton_binded_O_position_out.sh
+#How many protons are studied in the system
+total_proton_num=`echo 2`
+
+You need to modify in both files.
+
+
+
+
+

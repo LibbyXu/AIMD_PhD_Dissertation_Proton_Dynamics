@@ -1,0 +1,32 @@
+This is the script to grab all water O position in trajectory (including the water containing hydronium ion).
+We have separated the diffusion coefficient into the xy-plane, Z-dir and total.
+
+The files we need are XDATCAR and POSCAR from 2.
+
+##################################################################
+The command that we need to perform:
+sbatch Submit.run
+[Inside there you need to define the steps you need to deduct from
+[After this finished]
+
+cd xy_plane_MSD
+sbatch Submit.run
+
+##################################################################
+We need to modify something in the Submit_first.run:
+#The former steps we need to cut from our SDATCAR file
+needed_step=`echo 15000`
+
+The parameters we need to set to the following files:
+graping_two_proton_binded_O_position_out.sh
+#Definition of variables
+#The O index in water
+WO_St=`echo 65`
+WO_En=`echo 76`
+interger_WO=`echo 1`
+#if the water O dosen't have the order than we can define the O index as following:
+#WaterO=(115,116,117,118,119,120,121,122,123,124,125,126)
+
+You need to modify in both files.
+
+

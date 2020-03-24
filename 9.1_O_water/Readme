@@ -1,0 +1,51 @@
+This is the script to get the trajectory of the Water O.
+Then we will use this trajectory final_pos_WO in the second_gr_SO_HPW
+
+The file we need is the XDATCAR and POSCAR from 2.
+
+##################################################################
+The command that we need to perform:
+sbatch Submit.run
+[Inside, you need to define the steps you need to use from the trajectory]
+[After this finished]
+
+We need to transfer the trajectory to the second_gr_SO_HPW/data
+sbatch Submit.run
+
+##################################################################
+We need to modify something in the Submit.run in first_generate_traj:
+#The former steps we need to cut from our SDATCAR file
+needed_step=`echo 15000`
+
+And in the second_gr_SO_HPW file:
+We will use the "Rings" program from the "http://rings-code.sourceforge.net/" 
+You will need to modify some files inside in order to get the rdf of the file.
+option
+my_input
+data/traj
+All these three files we need to modify.
+
+##################################################################
+We need to modify some parameters:
+#Definition of variables
+#The index in the water O
+WO_St=`echo 65`
+WO_En=`echo 76`
+interger_WO=`echo 1`
+#If the water O does not have an order
+#WaterO=(115,116,117,118,119,120,121,122,123,124,125,126)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
