@@ -1,0 +1,25 @@
+This is the scripts to get all the proton positions in xy plane.
+
+##########################################################################
+The files we need here:
+XDATCAR POSCAR from 2
+Final_O_nearest_three_H_Final Final_O_uporder_list_Final from 4
+
+##########################################################################
+The parameters we need to modify:
+grap_proton_position_first.sh
+#Definition of variables
+#How many protons are studied in the system
+total_proton_num=`echo 2`
+
+Submit_first.run
+#The former steps we need to cut from our SDATCAR file
+needed_step=`echo 15000`   
+
+##########################################################################
+sbatch Submit_first.run
+
+
+
+
+
