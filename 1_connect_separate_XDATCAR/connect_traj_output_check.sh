@@ -8,7 +8,7 @@ Num_X=`wc -l num_XDATCAR | cut -d' ' -f1`
 
 cp XDATCAR_1 XDATCAR_temp
 for ((i=2; i<=${Num_X}; i++))
-do
+do0
 #without selective dynamics option
 sed -i '1,7d' XDATCAR_$i
 #with selective dynamics option
