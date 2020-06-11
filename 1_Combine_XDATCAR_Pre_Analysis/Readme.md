@@ -4,6 +4,8 @@ Before we start to analyze any features for the ion/proton dynamic behaviors, we
 
 ## Main Scripts & Functions
 
+**Submit.run** Linux Submmit Files
+
 This script will try to connect the separated vasp.out and XDATCAR files togather. Then we will get the T_E.dat and the combined XDATCAR and vasp.out
 
 ## Processing Scripts
