@@ -39,7 +39,7 @@ Here, we explore the proton dynamics (In my case, the surrounding environment is
 
 ## Notices
 
-#### In each file, we will have a separate “Readme.md” document to explain the usage and function of the current scrips. 
+#### In each file, we will have a separate “Readme.md” document to explain the usage and function of the current scrips.
 
 #### For each script, detailed illuminations on several necessary coding or command rows will be provided. Hopefully, it will be easy for you to understand. Please feel free to contact me if you have any questions.
 
