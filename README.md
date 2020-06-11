@@ -1,7 +1,7 @@
 # Home-made Computer Codes
 Currently, I am still working on improving the **performance & efficiency** of this coding package. **_Your suggestion and advice are highly appreciated_**.
 
-This coding package mainly focused the **Chapter 5** through my dissertation **_"`Probing Properties and Mechanisms of Protons in Materials and Interfaces for Energy Storage Systems Using First-Principles Methodology`"_**. Since several data are not released for publications, the dissertation will be avaliable online around **Jul. 2021** fortunately. 
+This coding package mainly focused the **Chapter 5** through my dissertation **"Probing Properties and Mechanisms of Protons in Materials and Interfaces for Energy Storage Systems Using First-Principles Methodology"**. Since several data are not released for publications, the dissertation will be avaliable online around **Jul. 2021** fortunately. 
 
 ## Goal for This Coding Package
 The aim of this repository is providing general codes **_(Python/MATLAB/LINUX)_** for analyzing the proton (or ions) dynamic behavior, transport phenomenon, diffusion mechanisms, and other chemical/physical properties through the trajectory output files _"XDATCAR"_ from the **Vienna Ab initio Simulation Package (VASP)**[1].
