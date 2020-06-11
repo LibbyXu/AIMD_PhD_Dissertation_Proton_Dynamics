@@ -22,18 +22,18 @@ Here, we explore the proton dynamics (In my case, the surrounding environment is
 
 **iv)**	The surfaces are mainly or partially covered by O terminations (the "partially" means that other terminated functional groups are inertia to the active media in **iii)**.
 
-
+****
 **To use these codes, we need the following operating environment, and some (already) installed packages:**
 
 **i)**	LINUX operating systems.
 
 **ii)**	**Python3** environment. (I used Python 3.7 to code.)
 
-**iii)** **VTSTSCRIPTS-933 coding packages** [2-3]  Available online: https://theory.cm.utexas.edu/vtsttools/scripts.html  We will call some functions from this package during our coding analysis. The path to the executables should be written into the environmental variables. 
+**iii)** **VTSTSCRIPTS-933 coding packages** [2-3]  Available online: https://theory.cm.utexas.edu/vtsttools/scripts.html  We will call some functions from this package during our coding analysis. The path to the executables should be written into the environmental variables.  
 
-**iv)** Familar with using the **nMOLDYN version 3.1.0** [4].  Available online: http://dirac.cnrs-orleans.fr/nMOLDYN.html  This program is utlized to analyze mean-square displacement (MSD) for molecular dynamics (MD) simulations.
+**iv)** Familar with using the **nMOLDYN version 3.1.0** [4].  Available online: http://dirac.cnrs-orleans.fr/nMOLDYN.html  This program is utlized to analyze mean-square displacement (MSD) for molecular dynamics (MD) simulations.  
 
-**v)** Know how to perform calculations using **R.I.N.G.S. version 1.3** (Rigorous Investigation of Investigation of Networks Generated using Simulations) [5] software.  Available online: http://rings-code.sourceforge.net/index.php  This program is mainly used to caclulate the radial distribution function (RDF) g(r) and  the coordination number N(r). 
+**v)** Know how to perform calculations using **R.I.N.G.S. version 1.3** (Rigorous Investigation of Investigation of Networks Generated using Simulations) [5] software.  Available online: http://rings-code.sourceforge.net/index.php  This program is mainly used to caclulate the radial distribution function (RDF) g(r) and  the coordination number N(r).  
 
 ## References
 [1] Kresse, G.; Furthmüller, J. Efficient Iterative Schemes for Ab Initio Total-Energy Calculations Using a Plane-Wave Basis Set. _Physical_ _Review_ _B_ **1996**, 54 (16), 11169. http://dx.doi.org/10.1103/PhysRevB.54.11169.
