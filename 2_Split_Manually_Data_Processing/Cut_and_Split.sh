@@ -80,6 +80,3 @@ done
 fi
 
 rm trajnum head_XDAT
-
-
-
