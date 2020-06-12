@@ -1,5 +1,5 @@
 #reordering the O_H list
-#We need file: Final_Combined_reduced_H_list
+#We need file: Final_Combined_reduced_H_list from 3_Proton_Bonded_O_index_Traj
 
 #load the Python3 environment
 module load python/3.6.0

@@ -8,7 +8,7 @@ From the following codes, you will obtain the *_proton bonded O paths_* (the ind
 
 **i)** **`Submit.run`**: Linux submit file
 
-**ii)** **`Submit_all_Jobs_1`**: Since we have several folders, we need to put each `Submit.run` file into each folder and then perform the calculations.
+**ii)** **`Submit_all_Jobs_1.sh`**: Since we have several folders, we need to put each `Submit.run` file into each folder and then perform the calculations.
 
 **iii)** **`Pro_O_coores_H.sh`**: The main script used to process the high-volume data analysis & produce the final results.
 
