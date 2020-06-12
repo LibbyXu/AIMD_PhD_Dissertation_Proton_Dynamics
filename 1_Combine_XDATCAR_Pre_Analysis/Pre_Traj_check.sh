@@ -8,10 +8,10 @@ cp XDATCAR_1 XDATCAR_temp
 
 for ((i=2; i<=${Num_X}; i++))
 do
-sed -i '1,7d' XDATCAR_$i #without selective dynamics option
-#sed -i '1,8d' XDATCAR_$i #with selective dynamics option
-cat XDATCAR_temp XDATCAR_$i > XDATCAR
-cp XDATCAR XDATCAR_temp 
+  sed -i '1,7d' XDATCAR_$i #without selective dynamics option
+  #sed -i '1,8d' XDATCAR_$i #with selective dynamics option
+  cat XDATCAR_temp XDATCAR_$i > XDATCAR
+  cp XDATCAR XDATCAR_temp 
 done
 rm XDATCAR_temp num_XDATCAR
 
@@ -28,8 +28,8 @@ cp vasp_1.out vasp_temp.out
 
 for ((i=2; i<=${Num_v}; i++))
 do
-cat vasp_temp.out vasp_$i.out > vasp.out
-cp vasp.out vasp_temp.out
+  cat vasp_temp.out vasp_$i.out > vasp.out
+  cp vasp.out vasp_temp.out
 done
 rm vasp_temp.out
 
