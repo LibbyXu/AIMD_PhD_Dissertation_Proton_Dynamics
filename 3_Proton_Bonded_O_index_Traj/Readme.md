@@ -40,7 +40,7 @@ Copy all **`File_XDATCAR_`** folder from **`2_Split_Manually_Data_Processing`** 
 
 ****
 
-#### Scripts & submit files for the First-step calculations: 
+### Scripts & submit files for the First-step calculations: 
 
 **`Pro_O_coores_H.sh, Submit.run, Submit_all_Jobs_1.sh`**
 
@@ -74,17 +74,17 @@ num_XDATCAR=`echo 15000`  #You can modify
 
 ****
 
-**Typing the command**: **`./Submit_all_Jobs_1.sh > LOG_1`**
+**1. Typing the command**: **`./Submit_all_Jobs_1.sh > LOG_1`**
 
 ****
 
-#### Scripts & submit files for the Second-step data combination: 
+### Scripts & submit files for the Second-step data combination: 
 
 **`Combin_all_Pro_O_files_2.sh`**
 
 ****
 
-**Typing the command**: **`./Combin_all_Pro_O_files_2.sh > LOG_2`**
+**2. Typing the command**: **`./Combin_all_Pro_O_files_2.sh > LOG_2`**
 
 ****
 
