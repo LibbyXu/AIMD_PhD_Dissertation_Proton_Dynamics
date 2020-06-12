@@ -8,7 +8,7 @@ Before we start to analyze different features for the ion/proton dynamic behavio
 
 **ii)** **`Pre_Traj_check.sh`**: Code processing file
 
-This script aims to combine the separated **"vasp_#.out" & "XDATCAR_#"** files (due to the limited simulation time to perform **_Ab-initio_ molecular dynamic "AIMD"** each time). 
+This script aims to combine the separated **"vasp_#.out" & "XDATCAR_#"** files (due to the limited simulation time to perform **_Ab-initio_ molecular dynamic "AIMD"** each time). Here, the **AIMD** simulation is based on **constant number of molecules, constant volume, and constant temperature(NVT)**. 
 
 After executing the commands, we will get the ouput files: **"T_E.dat"**, the combined **"XDATCAR" & "vasp.out"**. 
 
@@ -28,7 +28,9 @@ Separated vasp.out files (more than 2 files): **`vasp_1.out, vasp_2.out, vasp_2.
 
 Separated trajectory file (more than 2 files): **`XDATCAR_1, XDATCAR_2, XDATCAR_3, ……`**
 
-Scripts & submit files: **`Pre_Traj_check.sh, Submit.run`**
+#### Scripts & submit files: 
+
+**`Pre_Traj_check.sh, Submit.run`**
 
 ****
 

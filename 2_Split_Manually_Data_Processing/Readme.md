@@ -4,7 +4,7 @@ So that it can run more faster.
 
 ##################################################################
 The command used to run the file:
-sbatch Submit.run
+sbatch Submit.run or ./Cut_and_Split.sh > LOG
 
 
 
