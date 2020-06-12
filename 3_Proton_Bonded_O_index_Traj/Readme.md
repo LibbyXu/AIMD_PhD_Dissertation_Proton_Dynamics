@@ -88,7 +88,7 @@ num_XDATCAR=`echo 15000`  #You can modify
 
 ****
 
-#### Important Notes:
+### Important Notes:
 
 **i)** You need to give the Right Path to the current folder for the following files:
 
