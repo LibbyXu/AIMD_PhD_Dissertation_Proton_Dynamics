@@ -1,17 +1,18 @@
 #If your z lattice are pperpendicular to the xy plane than you can use this method to extraxt the xy plane MSD
-#In this script, we need two files, the first is the position_O_traj_temp and head_XDATCAR (both from the previous step)
+#We need two files:position_O_traj_temp & head_XDATCAR both from the previous step.
 
 #load the pyrhon3 environment
 module load python/3.6.0
 
 #Definition of variables
 #How many protons are studied in the system
-total_proton_num=`echo 2`
+total_proton_num=`echo 2` #you can modify
 
-########################################################################################################################
-# Python dealing with the atom list, finding the most nearest two O atoms for the corresponding H
-########################################################################################################################
+###################################
+#Python bonded-O position XY-plane#
+###################################
 cat << EOF > grab_Proton_binded_O_position_for_XYPlane_MSD_calcu.py
+
 import numpy as np
 import math
 
@@ -27,9 +28,13 @@ for i in range(0,len_total):
         
 np.savetxt('xy_plane_position', position_xy, fmt="%s", delimiter='   ')
 EOF
-########################################################################################################################
-# End of the python file
-########################################################################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python grab_Proton_binded_O_position_for_XYPlane_MSD_calcu.py > python.log
 rm *.py*
 

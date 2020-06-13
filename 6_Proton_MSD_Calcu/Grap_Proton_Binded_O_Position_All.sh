@@ -1,29 +1,34 @@
-#In this script, we need three files, the first is the whole XDATCAR and the second is the Final_O_uporder_list_Final and the corresponding POSCAR
+#This is used to grap the xyz coordinate postitions of the protn-bonded O each step.
+#We need three files: [POSCAR, XDATCAR] from 2_Split_Manually_Data_Processing, Final_proton_bonded_O_reorder_list_Final from 4_Reordering_O_H_List
 
 #load the pyrhon3 environment
 module load python/3.6.0
 
 #Definition of variables
 #How many protons are studied in the system
-total_proton_num=`echo 2`
+total_proton_num=`echo 2` #you can modify
 
-#First we need to get the head of the script
+#Some data preparations
+##without Selective option when doing AIMD using VASP
 sed '8,$d' POSCAR > head_XDATCAR
 sed '1,6d' head_XDATCAR > NUMA
-#obtinaing the right loop files
-sed '1,7d' XDATCAR > XDATCAR_final
+##with Selective option when doing AIMD using VASP
+#sed '9,$d' POSCAR > head_XDAT
+#sed '1,6d' head_XDAT > NUMA
 
+##obtinaing the right loop files
+sed '1,7d' XDATCAR > XDATCAR_final
 rm XDATCAR POSCAR
 
-#Get ride of the first 5000 steps
+#Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
 delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' XDATCAR_final
 rm NUMA
 
-########################################################################################################################
-# Python dealing with the atom list, finding the most nearest two O atoms for the corresponding H
-########################################################################################################################
+##################################
+#Python bonded-O position XYZ-dir#
+##################################
 cat << EOF > grab_Proton_binded_O_position_for_MSD_calcu.py
 #Grab proton binded O position to this file
 import numpy as np
@@ -32,7 +37,7 @@ import math
 step_atom = ${num_atoms}
 step_lines = step_atom+1
 proton_n = ${total_proton_num}
-data_O = np.genfromtxt('Final_O_uporder_list_Final', delimiter='')
+data_O = np.genfromtxt('Final_proton_bonded_O_reorder_list_Final', delimiter='')
 Whole_traj = np.genfromtxt('XDATCAR_final', delimiter='')
 
 num_steps=len(data_O[:,0])
@@ -46,9 +51,13 @@ for i in range(0,num_steps):
 np.savetxt('position_O_traj', position_O, fmt="%s", delimiter='   ')
 
 EOF
-########################################################################################################################
-# End of the python file
-########################################################################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python grab_Proton_binded_O_position_for_MSD_calcu.py > python.log
 rm *.py*
 
@@ -76,11 +85,4 @@ rm  final_O_position_traj_temp XDATCAR_final
 mkdir xy_plane_MSD
 mv head_XDATCAR position_O_traj_temp xy_plane_MSD
 cp graping_two_proton_binded_O_position_out_xyplane.sh xy_plane_MSD
-mv Submit.run xy_plane_MSD
-
-cd xy_plane_MSD
-sed -i 's/graping_two_proton_binded_O_position_out/graping_two_proton_binded_O_position_out_xyplane/g' Submit.run
-cd ..
-
-
-
+mv Submit_XY.run xy_plane_MSD
