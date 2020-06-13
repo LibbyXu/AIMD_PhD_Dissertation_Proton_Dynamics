@@ -10,7 +10,7 @@
 
 ## About Outputs
 
-**i)** **`position_Surface_O_all`**: The combined XYZ-position file for all H/proton within interfaces for each steps along paths. 
+**i)** **`position_Surface_O_all`**: The combined XYZ-position file for all H/proton within interfaces for each step along paths. 
 
 ## Processing Scripts
 

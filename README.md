@@ -35,6 +35,8 @@ Here, we explore the proton dynamics (In my case, the surrounding environment is
 
 **v)** Know how to perform calculations using **R.I.N.G.S. version 1.3** (Rigorous Investigation of Networks Generated using Simulations) [5] software.  Available online: http://rings-code.sourceforge.net/index.php  This program is used mainly to calculate the radial distribution function (RDF) g(r) and the coordination number N(r).  
 
+**vi)** Know how to perform **Bader Charge Analysis** [6-7]: Available online:http://theory.cm.utexas.edu/henkelman/code/bader/. This program is used to analyze individual atomic charge analysis.
+
 ## References
 [1] Kresse, G.; Furthmüller, J. Efficient Iterative Schemes for Ab Initio Total-Energy Calculations Using a Plane-Wave Basis Set. _Physical_ _Review_ _B_ **1996**, 54 (16), 11169. http://dx.doi.org/10.1103/PhysRevB.54.11169.
 
@@ -45,6 +47,10 @@ Here, we explore the proton dynamics (In my case, the surrounding environment is
 [4] Róg, T.; Murzyn, K.; Hinsen, K.; Kneller, G. R. NMoldyn: A Program Package for a Neutron Scattering Oriented Analysis of Molecular Dynamics Simulations. _Journal_ _of_ _computational_ _chemistry_ **2003**, 24 (5), 657–667. https://doi.org/10.1002/jcc.10243.
 
 [5] Le Roux, S.; Jund, P. Ring Statistics Analysis of Topological Networks: New Approach and Application to Amorphous GeS2 and SiO2 Systems. _Computational_ _Materials_ _Science_ **2010**, 49 (1), 70–83. https://doi.org/10.1016/j.commatsci.2010.04.023.
+
+[6] Tang, W.; Sanville, E.; Henkelman, G. A Grid-Based Bader Analysis Algorithm without Lattice Bias. Journal of Physics: Condensed Matter **2009**, 21 (8), 084204. https://iopscience.iop.org/article/10.1088/0953-8984/21/8/084204/meta.
+
+[7] Yu, M.; Trinkle, D. R. Accurate and Efficient Algorithm for Bader Charge Integration. The Journal of chemical physics **2011**, 134 (6), 064111. https://doi.org/10.1063/1.3553716.
 
 ## Notices
 
