@@ -1,16 +1,15 @@
-#In this script, we need two files, the first is the whole XDATCAR and the second is the corresponding POSCAR
+#Extracting the positions for H and protons at interfaces.  
+#We need two files: POSCAR, XDATCAR from 2_Split_Manually_Data_Processing
 
 #load the pyrhon3 environment
 module load python/3.6.0
 
 #Definition of variables
-SurfaceO=()
-
-#For the index of proton or H in water layer
-#if the index has an order
-H_St=`echo 125`
-H_En=`echo 150`
-interger_H=`echo 1`
+##The O index from surface 
+##If the indexes have an order
+H_St=`echo 125`  #you can modify
+H_En=`echo 150`  #you can modify
+interger_H=`echo 1`  #you can modify
 echo "${H_St}" >> index_HPWater_temp
 for ((i=${H_St}+${interger_H}; i<=${H_En}; i+=${interger_H}))   #i+=3
 do
@@ -20,24 +19,33 @@ cat index_HPWater_temp | xargs > index_HP_Water
 WaterHP_temp=(`echo $(grep "," index_HP_Water)`)
 WaterHP=`echo ${WaterHP_temp[@]} | sed 's/ //g'`
 rm index_HP_Water
+##If the index does not have an order
+#WaterHP=(126,131,132,135,137,140,141,143,145)
 
-#We could know the number of the H and proton inside water layer
+#The total number of H & proton at interfaces
 num_HP=`wc -l index_HPWater_temp | cut -d' ' -f1`
 rm index_HPWater_temp
-#We could also know the # of O at the interfacial surface
+
+#No surface O during our data analysis
+SurfaceO=()
+#The total number of surface-O at interfaces
 IFS=', ' read -r -a num_SO <<< "${SurfaceO[@]}"
-#Total num lines (xyz) writen in each step
+#The total number of lines (xyz-coordinate positions) for each time-step
 total_HPO_line=`echo ${#num_SO[@]}'+'${num_HP} | bc`
 
-#First we need to get the head of the script
+#Some data preparations
+##without Selective option when doing AIMD using VASP
 sed '8,$d' POSCAR > head_XDATCAR
 sed '1,6d' head_XDATCAR > NUMA
+##with Selective option when doing AIMD using VASP
+#sed '9,$d' POSCAR > head_XDAT
+#sed '1,6d' head_XDAT > NUMA
+
 #obtinaing the right loop files
 sed '1,7d' XDATCAR > XDATCAR_final
-
 rm XDATCAR POSCAR
 
-#Get ride of the first 5000 steps
+#Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
 delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' XDATCAR_final
@@ -47,11 +55,11 @@ grep 'Direct' XDATCAR_final > line_D
 total_numstep=`wc -l line_D | cut -d' ' -f1`
 rm line_D
 
-########################################################################################################################
-# Python dealing with the O position in list for MSD
-########################################################################################################################
-cat << EOF > grab_SO_HPW_traj.py
-#interfacial surface O and proton/H from water position traj
+##############################################
+#Python interfacial H/proton position XYZ-dir#
+##############################################
+cat << EOF > grab_HPW_traj.py
+
 import numpy as np
 import math
 
@@ -65,32 +73,34 @@ total_i = num_SOi+num_HPWi
 num_steps = ${total_numstep}
 Whole_traj = np.genfromtxt('XDATCAR_final', delimiter='')
 
-pos_SO_HPW=np.zeros(shape=(num_steps*total_i,3))
+pos_HPW=np.zeros(shape=(num_steps*total_i,3))
 
 t=0
 for i in range(0,num_steps):
     #first obtain all needed Surface O atom position
     for ii in range(0,num_SOi):
         num_index_SO=int(data_SOi[ii])
-        pos_SO_HPW[t,:]=Whole_traj[(i*step_lines+num_index_SO),:]
+        pos_HPW[t,:]=Whole_traj[(i*step_lines+num_index_SO),:]
         t = t+1
     #Second obtain all needed proton and H from water layer position
     for iii in range(0,num_HPWi):
         num_index_HPW=int(data_HPWi[iii])
-        pos_SO_HPW[t,:]=Whole_traj[(i*step_lines+num_index_HPW),:]
+        pos_HPW[t,:]=Whole_traj[(i*step_lines+num_index_HPW),:]
         t = t+1
 
-np.savetxt('pos_SO_HPW', pos_SO_HPW, fmt="%s", delimiter='   ')
+np.savetxt('pos_HPW', pos_HPW, fmt="%s", delimiter='   ')
 
 EOF
-########################################################################################################################
-# End of the python file
-########################################################################################################################
-python grab_SO_HPW_traj.py > python.log
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
+python grab_HPW_traj.py > python.log
 rm *.py*
 
-awk '{printf("%12.8f %12.8f %12.8f\n", $1,$2,$3)}' pos_SO_HPW > pos_SO_HPW_temp
-rm pos_SO_HPW
-
-mv pos_SO_HPW_temp position_H_all
-
+awk '{printf("%12.8f %12.8f %12.8f\n", $1,$2,$3)}' pos_HPW > pos_HPW_temp
+mv pos_HPW_temp position_H_Proton_Water_all
+rm pos_HPW head_XDATCAR XDATCAR_final

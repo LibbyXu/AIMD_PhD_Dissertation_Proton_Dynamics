@@ -22,7 +22,7 @@
 
 **`Graping_SurO_WatHProton.sh, Submit.run`**.
 
-**We need to modify one parameter in Submit.run**.
+**We need to modify one parameter in** **`Submit.run`**.
 
 ```javascript
 #The number of the last steps that will be needed in your data analysis
