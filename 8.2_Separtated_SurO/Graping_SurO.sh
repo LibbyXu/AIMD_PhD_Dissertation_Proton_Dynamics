@@ -1,33 +1,31 @@
-#Extracting the positions for H and protons at interfaces.  
+#Extracting the positions for surface-O at interfaces.  
 #We need two files: POSCAR, XDATCAR from 2_Split_Manually_Data_Processing
 
 #load the pyrhon3 environment
 module load python/3.6.0
 
 #Definition of variables
-##The H/proton index from surface 
+##The surface-O index at interfaces
 ##If the indexes have an order
-H_St=`echo 125`  #you can modify
-H_En=`echo 150`  #you can modify
-interger_H=`echo 1`  #you can modify
-echo "${H_St}" >> index_HPWater_temp
-for ((i=${H_St}+${interger_H}; i<=${H_En}; i+=${interger_H}))   #i+=3
+SO_St=`echo 30`  #you can modify
+SO_En=`echo 65`  #you can modify
+interger_SO=`echo 1`  #you can modify
+echo "${SO_St}" >> index_SO_temp
+for ((i=${SO_St}+${interger_SO}; i<=${SO_En}; i+=${interger_SO}))   #i+
 do
-   echo ",$i" >> index_HPWater_temp
+  echo ",$i" >> index_SO_temp
 done
-cat index_HPWater_temp | xargs > index_HP_Water
-WaterHP_temp=(`echo $(grep "," index_HP_Water)`)
-WaterHP=`echo ${WaterHP_temp[@]} | sed 's/ //g'`
-rm index_HP_Water
+cat index_SO_temp | xargs > index_SO
+SO_temp=(`echo $(grep "," index_SO)`)
+SurfaceO=`echo ${SO_temp[@]} | sed 's/ //g'`
+rm index_SO index_SO_temp
 ##If the index does not have an order
-#WaterHP=(126,131,132,135,137,140,141,143,145)
+#SurfaceO=(126,131,132,135,137,140,141,143,145)
 
-#The total number of H & proton at interfaces
-num_HP=`wc -l index_HPWater_temp | cut -d' ' -f1`
-rm index_HPWater_temp
-
-#No surface O during our data analysis
-SurfaceO=()
+#No H/proton during our data analysis
+WaterHP=()
+#The total number of H/proton at interfaces
+num_HP=`echo 0`
 #The total number of surface-O at interfaces
 IFS=', ' read -r -a num_SO <<< "${SurfaceO[@]}"
 #The total number of lines (xyz-coordinate positions) for each time-step
@@ -55,10 +53,10 @@ grep 'Direct' XDATCAR_final > line_D
 total_numstep=`wc -l line_D | cut -d' ' -f1`
 rm line_D
 
-##############################################
-#Python interfacial H/proton position XYZ-dir#
-##############################################
-cat << EOF > grab_HPW_traj.py
+###############################################
+#Python interfacial Surface-O position XYZ-dir#
+###############################################
+cat << EOF > grab_SO_traj.py
 
 import numpy as np
 import math
@@ -73,22 +71,22 @@ total_i = num_SOi+num_HPWi
 num_steps = ${total_numstep}
 Whole_traj = np.genfromtxt('XDATCAR_final', delimiter='')
 
-pos_HPW=np.zeros(shape=(num_steps*total_i,3))
+pos_SO=np.zeros(shape=(num_steps*total_i,3))
 
 t=0
 for i in range(0,num_steps):
-    #first obtain all needed Surface O atom position
+    #first obtain all needed Surface-O atom position
     for ii in range(0,num_SOi):
         num_index_SO=int(data_SOi[ii])
-        pos_HPW[t,:]=Whole_traj[(i*step_lines+num_index_SO),:]
+        pos_SO[t,:]=Whole_traj[(i*step_lines+num_index_SO),:]
         t = t+1
-    #Second obtain all needed proton and H from water layer position
+    #Second obtain all needed proton & H from water layer position
     for iii in range(0,num_HPWi):
         num_index_HPW=int(data_HPWi[iii])
-        pos_HPW[t,:]=Whole_traj[(i*step_lines+num_index_HPW),:]
+        pos_SO[t,:]=Whole_traj[(i*step_lines+num_index_HPW),:]
         t = t+1
 
-np.savetxt('pos_HPW', pos_HPW, fmt="%s", delimiter='   ')
+np.savetxt('pos_SO', pos_SO, fmt="%s", delimiter='   ')
 
 EOF
 ########################
@@ -98,9 +96,9 @@ EOF
 #############################
 #Linux data processing codes#
 #############################
-python grab_HPW_traj.py > python.log
+python grab_SO_traj.py > python.log
 rm *.py*
 
-awk '{printf("%12.8f %12.8f %12.8f\n", $1,$2,$3)}' pos_HPW > pos_HPW_temp
-mv pos_HPW_temp position_H_Proton_Water_all
-rm pos_HPW head_XDATCAR XDATCAR_final
+awk '{printf("%12.8f %12.8f %12.8f\n", $1,$2,$3)}' pos_SO > pos_SO_temp
+mv pos_SO_temp position_Surface_O_all
+rm pos_SO XDATCAR_final head_XDATCAR 
