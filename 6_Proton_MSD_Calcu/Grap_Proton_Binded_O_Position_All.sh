@@ -26,9 +26,9 @@ delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' XDATCAR_final
 rm NUMA
 
-##################################
-#Python bonded-O position XYZ-dir#
-##################################
+#########################################
+#Python proton-bonded O position XYZ-dir#
+#########################################
 cat << EOF > grab_Proton_binded_O_position_for_MSD_calcu.py
 #Grab proton binded O position to this file
 import numpy as np
@@ -84,5 +84,5 @@ rm  final_O_position_traj_temp XDATCAR_final
 
 mkdir xy_plane_MSD
 mv head_XDATCAR position_O_traj_temp xy_plane_MSD
-cp graping_two_proton_binded_O_position_out_xyplane.sh xy_plane_MSD
+cp Grap_Proton_Binded_O_Position_XYplane.sh xy_plane_MSD
 mv Submit_XY.run xy_plane_MSD

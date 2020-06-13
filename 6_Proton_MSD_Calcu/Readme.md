@@ -1,6 +1,6 @@
-# Grabbing Proton-bonded O Positions (XYZ-cooridinates)
+# Grabbing Proton-bonded O Positions (XYZ-coordinates)
 
-From the **`Final_proton_bonded_O_reorder_list_Final`** from **`4_Reordering_O_H_List`** of which the file involves information of all the continuous O index change along trajectories. Here, in this folder, we try to grab the position (XYZ-Coordinates) of the proton-bonded O corresponding to each step. 
+From the **`Final_proton_bonded_O_reorder_list_Final`** from **`4_Reordering_O_H_List`** of which the file involves information of all the continuous O index change along trajectories. Here, in this folder, we try to grab the position (XYZ-Coordinates) of the proton-bonded O corresponding to each step. The resulted trajectories will be used to further calculate the proton diffusion coefficeints.
 
 ***The requirements for the systems that can use these scripts to obtain the proton-bonded O coordinates for the whole trajectories: The unit cell: The Z-direction should be perpendicular to the XY-plane.***
 
@@ -18,13 +18,13 @@ From the **`Final_proton_bonded_O_reorder_list_Final`** from **`4_Reordering_O_H
 
 #### After the first calculations:
 
-**i)** **`final_O_position_traj`**: Contain the calculated XYZ-dir. coordinate positions results.
+**i)** **`final_O_position_traj`**: Contain the calculated XYZ-dir. coordinate positions results. (The format similar to VASP **`XDATCAR`**)
 
 **ii)** Generated a folder called **`xy_plane_MSD`**: In this folder, we have the produced **`position_O_traj_temp`** & **`head_XDATCAR`** files.
 
 #### After the second calculations:
 
-**i)** **`final_xy_O_position`**: Contain the calculated XY-dir. coordinate positions results.
+**i)** **`final_xy_O_position`**: Contain the calculated XY-dir. coordinate positions results.(The format similar to VASP **`XDATCAR`**)
 
 ## Processing Scripts
 
@@ -71,6 +71,6 @@ sbatch Submit_XY.run
 
 ## Notes:
 
-The produced results **`final_O_position_traj`** and **`final_xy_O_position`** can be used for the (mean square displacement) *MSD* analysis [R.I.N.G.S.]. *For calculating the proton (total) diffusion coefficient, the decomposed diffusion coefficient (XY-plane, Z-dir.).*  
+The produced results **`final_O_position_traj`** and **`final_xy_O_position`** can be used for the (mean square displacement) *MSD* analysis [R.I.N.G.S.]. *And for later calculating the proton (total) diffusion coefficient, the decomposed diffusion coefficient (XY-plane, Z-dir.).*  
 
 ****

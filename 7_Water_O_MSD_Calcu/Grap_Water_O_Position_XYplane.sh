@@ -1,15 +1,15 @@
-#If your z lattice are pperpendicular to the xy plane than you can use this method to extraxt the xy plane MSD
-#In this script, we need two files, the first is the position_O_traj_temp and head_XDATCAR (both from the previous step)
+#If your z lattice are perpendicular to the xy plane, you can use this script to extraxt the xy-plane Water-O MSD
+#We need two files: position_O_traj_temp & head_XDATCAR from the previous step.
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-#WaterO=(115,116,117,118,119,120,121,122,123,124,125,126)
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+##The O index in water 
+##If the indexes have an order
+WO_St=`echo 60`  #you can modify
+WO_En=`echo 75`  #you can modify
+interger_WO=`echo 1`  #you can modify
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))
 do
@@ -19,13 +19,16 @@ cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(115,116,117,118,119,120,121,122,123,124,125,126)
 
 IFS=', ' read -r -a water_num <<< "${WaterO[@]}"
 
-########################################################################################################################
-# Python dealing with the atom list, finding the most nearest two O atoms for the corresponding H
-########################################################################################################################
+##########################################
+#Python proton-bonded O position XY-plane#
+##########################################
 cat << EOF > grab_O_posi_xy.py
+
 import numpy as np
 import math
 
@@ -38,10 +41,15 @@ position_xy=np.zeros(shape=(len_total,3))
 position_xy[:,0:2]=data_xyz[:,0:2]
 
 np.savetxt('xy_plane_water_O', position_xy, fmt="%s", delimiter='   ')
+
 EOF
-########################################################################################################################
-# End of the python file
-########################################################################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python grab_O_posi_xy.py > python.log
 rm *.py*
 
@@ -61,4 +69,3 @@ done
 
 cat head_XDATCAR final_xy_water_O_temp > final_xy_water_O
 rm  head_XDATCAR final_xy_water_O_temp xy_plane_water_O_temp
-

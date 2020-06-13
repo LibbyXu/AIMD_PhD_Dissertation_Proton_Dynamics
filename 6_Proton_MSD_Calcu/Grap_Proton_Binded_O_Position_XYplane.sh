@@ -1,16 +1,16 @@
-#If your z lattice are pperpendicular to the xy plane than you can use this method to extraxt the xy plane MSD
+#If your z lattice are perpendicular to the xy plane, you can use this script to extraxt the xy-plane proton-bonded O MSD
 #We need two files:position_O_traj_temp & head_XDATCAR both from the previous step.
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables
 #How many protons are studied in the system
 total_proton_num=`echo 2` #you can modify
 
-###################################
-#Python bonded-O position XY-plane#
-###################################
+##########################################
+#Python proton-bonded O position XY-plane#
+##########################################
 cat << EOF > grab_Proton_binded_O_position_for_XYPlane_MSD_calcu.py
 
 import numpy as np
