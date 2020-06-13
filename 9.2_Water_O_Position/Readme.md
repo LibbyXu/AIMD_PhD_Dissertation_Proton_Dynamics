@@ -12,7 +12,9 @@
 
 **i)** **`Water_O_POS_Z`**: The combined XYZ-position file for all interfacial Water-O for each step along paths. 
 
-**ii)** **`Water_O_POS_Z_sorted`**: Sorted the Z-dir. (changing the direct coordinates to the cartesian coordinates) of the file **`Water_O_POS_Z`** for  further analysis on the Water-O density along Z-direction. The requirement for produced this **`Water_O_POS_Z_sorted`** file is that the Z-dir. lattice are perpendicular to the xy plane.
+**ii)** **`Water_O_POS_Z_sorted`**: Sorted the Z-dir. (changing the direct coordinates to the cartesian coordinates) of the file **`Water_O_POS_Z`** for further analysis on the Water-O density along Z-direction. 
+
+The requirement for producing this **`Water_O_POS_Z_sorted`** file is that the Z-direction of this unit-cell are perpendicular to the XY-plane.
 
 ## Processing Scripts
 
