@@ -1,4 +1,4 @@
-# Creating all Water-O positions For All steps
+# Creating All Water-O Positions For All Steps
 
 **Here, we obtain the XYZ-coordinate positions of all interfacial Water-O for each step along paths.** 
 
