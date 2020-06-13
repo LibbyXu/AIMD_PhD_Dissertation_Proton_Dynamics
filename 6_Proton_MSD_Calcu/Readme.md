@@ -71,6 +71,6 @@ sbatch Submit_XY.run
 
 ## Notes:
 
-The produced results **`final_O_position_traj`** and **`final_xy_O_position`** can be used for the (mean square displacement) *MSD* analysis [R.I.N.G.S.]. *And for later calculating the proton (total) diffusion coefficient, the decomposed diffusion coefficient (XY-plane, Z-dir.).*  
+The produced results **`final_O_position_traj`** and **`final_xy_O_position`** can be used for the (mean square displacement) *MSD* analysis [nMOLDYN]. *And for later calculating the proton (total) diffusion coefficient, the decomposed diffusion coefficient (XY-plane, Z-dir.).*  
 
 ****

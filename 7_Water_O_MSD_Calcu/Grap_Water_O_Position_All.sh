@@ -1,5 +1,5 @@
 #This is used to grap the xyz coordinate postitions of all water-O each step.
-#We need two files: [POSCAR, XDATCAR] from 2_Split_Manually_Data_Processing
+#We need two files: POSCAR, XDATCAR from 2_Split_Manually_Data_Processing
 
 #load the pyrhon3 environment
 module load python/3.6.0
@@ -13,7 +13,7 @@ interger_WO=`echo 1`  #you can modify
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
@@ -44,9 +44,9 @@ grep 'Direct' XDATCAR_final > line_D
 total_numstep=`wc -l line_D | cut -d' ' -f1`
 rm line_D
 
-##################################
+#################################
 #Python Water-O position XYZ-dir#
-##################################
+#################################
 cat << EOF > grab_water_O_MSD.py
 #water O position traj
 import numpy as np
@@ -87,10 +87,10 @@ Num_water=`echo ${Num_lines}'/'${total_numstep} | bc`
 
 for ((aa=1; aa<=${total_numstep}; aa++))
 do
-    echo "Direct configuration=  $aa" >> final_Water_O_traj_temp
-    start_line=`echo '('$aa'-'1')*'${Num_water}'+'1 | bc`
-    end_line=`echo $aa'*'${Num_water} | bc`
-    sed -n ''${start_line}','${end_line}'p' pos_Water_O_traj_temp >> final_Water_O_traj_temp
+  echo "Direct configuration=  $aa" >> final_Water_O_traj_temp
+  start_line=`echo '('$aa'-'1')*'${Num_water}'+'1 | bc`
+  end_line=`echo $aa'*'${Num_water} | bc`
+  sed -n ''${start_line}','${end_line}'p' pos_Water_O_traj_temp >> final_Water_O_traj_temp
 done
 
 sed -i '6,7d' head_XDATCAR
