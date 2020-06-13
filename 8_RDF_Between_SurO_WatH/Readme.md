@@ -1,6 +1,6 @@
 # Creating Trajectories of Surface-O & H(proton) at Interfaces
 
-**Here, we need to create the trajectories for surface-O from the interfaces & the hydrogen/protons from the interfaces.** The produced paths will be used for *the radial distribution function (RDF)* analysis using the **`R.I.N.G.S. software`**. 
+**Here, we need to create the trajectories for surface-O & the hydrogen/protons from the interfaces.** The produced paths will be used for *the radial distribution function (RDF)* analysis using the **`R.I.N.G.S. software`**. 
 
 ## Main Scripts & Functions
 
