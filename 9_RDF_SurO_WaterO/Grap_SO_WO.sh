@@ -1,4 +1,4 @@
-#Only extract the path of the water-O and Surface-O O from materials
+#Only extract the path of the water-O and Surface-O from interfaes
 #We need two files: POSCAR, XDATCAR from 2_Split_Manually_Data_Processing
 
 #load the pyrhon3 environment
