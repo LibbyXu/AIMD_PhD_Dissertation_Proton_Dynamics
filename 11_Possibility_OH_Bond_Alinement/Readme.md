@@ -20,7 +20,9 @@ We need to know the water dipole moment directions, the OH orientations from wat
 
 #### Outputs created by Combined_Traj.sh:
 
-**i)** **`Final_Total_OH_Degree_Results`**: The combined results for all **`final_WO_position`** outputs.
+**i)** **`Final_Conbined_OH_Degree_Results`** folder: Contains the combined results for all **`final_WO_position`** outputs, the final combined file named as **`Final_Total_OH_Degree_Results`**.
+
+**ii)** **`Slurm_ALL`** folder: Contain the check files.
 
 ## Processing Scripts
 
