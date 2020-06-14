@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#Put the needed input files into the folder and conduct the calculations
 for file in *File_XDATCAR_*;
   do
   filename="$(basename "$file")"
@@ -12,4 +13,3 @@ for file in *File_XDATCAR_*;
   sbatch ${job_name}.run
   cd ..
 done
-
