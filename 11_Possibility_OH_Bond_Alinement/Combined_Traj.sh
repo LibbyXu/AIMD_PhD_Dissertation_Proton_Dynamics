@@ -10,12 +10,12 @@ mkdir Slurm_ALL
 
 for ((a=1;a<=${Num_Xfile};a++))
 do
-cd File_XDATCAR_$a
-cp final_WO_position final_WO_position_$a
-cp *slurm* slurm_$a
-mv final_WO_position_$a ../Final_connected_traj_continues
-mv slurm_$a ../Slurm_ALL
-cd ..
+  cd File_XDATCAR_$a
+  cp final_WO_position final_WO_position_$a
+  cp *slurm* slurm_$a
+  mv final_WO_position_$a ../Final_connected_traj_continues
+  mv slurm_$a ../Slurm_ALL
+  cd ..
 done
 
 cd Final_connected_traj_continues
