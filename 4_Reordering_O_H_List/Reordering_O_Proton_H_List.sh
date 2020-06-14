@@ -133,4 +133,4 @@ do
 done  
 cat -n Final_proton_bonded_O_nearest_three_H_list > Final_proton_bonded_O_nearest_three_H_list_Final  
   
-rm proton_bonded_O_nearest_three_H_list Final_proton_bonded_O_nearest_three_H_list Final_proton_bonded_O_reorder_list proton_bonded_O_reorder_list Final_reduced_H_list *.py*
+rm proton_bonded_O_nearest_three_H_list Final_proton_bonded_O_nearest_three_H_list Final_proton_bonded_O_reorder_list proton_bonded_O_reorder_list Final_Combined_reduced_H_list *.py*
