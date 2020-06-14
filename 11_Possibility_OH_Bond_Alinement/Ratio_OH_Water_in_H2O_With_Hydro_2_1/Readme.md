@@ -24,7 +24,7 @@ Here, we try to examine number of the orientations (degree) within certain degre
 
 #### Outputs created by OH_Unit_Area_Second.sh:
 
-**i)** **`Python_Result.log`**: 
+**i)** **`Python_Result.log`**: Averaged number of OH within certain degree (45) towards the surface of the eletrode materials.
 
 **ii)** **`final_polarization_file`**: 
 

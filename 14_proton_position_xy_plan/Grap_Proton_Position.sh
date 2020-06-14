@@ -1,4 +1,6 @@
-# We need files XDATCAR, POSCAR, Final_O_nearest_three_H_Final, Final_O_uporder_list_Final
+#Obtain the proton positions (XYZ)
+#We need files: [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing, [Final_proton_bonded_O_reorder_list_Final, Final_proton_bonded_O_nearest_three_H_list_Final] from 4_Reordering_O_H_List
+
 # load needed environment
 module load python/3.6.0
 
@@ -42,8 +44,8 @@ if int(numline_steps*Total_atom)!=int(No_Dir_file):
     check=check+1
     
 if check==0:
-    H_to_proton_index=np.genfromtxt('Final_O_nearest_three_H_Final', delimiter='')
-    proton_O_index=np.genfromtxt('Final_O_uporder_list_Final', delimiter='')
+    H_to_proton_index=np.genfromtxt('Final_proton_bonded_O_nearest_three_H_list_Final', delimiter='')
+    proton_O_index=np.genfromtxt('Final_proton_bonded_O_reorder_list_Final', delimiter='')
     for i in range(0,numline_steps):
         for ii in range(0,total_proton_num):
             cc=0
@@ -73,7 +75,7 @@ EOF
 ##################################################################
 python Check_proton_position_files.py >> Python.log
 
-rm Final_O_uporder_list_Final Final_O_nearest_three_H_Final
+rm Final_proton_bonded_O_nearest_three_H_list_Final Final_proton_bonded_O_reorder_list_Final
 rm Check_proton_position_files.py
 
 awk '{printf("%6d\n",$1)}' Proton_index_corres > first_column_index
