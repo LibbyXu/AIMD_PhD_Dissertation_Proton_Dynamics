@@ -1,35 +1,37 @@
-#We need two input scripts, the dirst is the CONTCAR nad the second is the corresponding ADF.dat (bader analysis)
+#This script is to process the average bader charge for different building blccks of the systems. 
+#We need input scripts: CONTCAR and ADF.dat (from VASP Bader Analysis)
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
-#Building blocks name and num atom
-echo "MXeneupHalf,WaterProton,MXeneloHalf" > B_name_temp
+#Definition of variables
+##Building blocks name and Num of atoms for each Building block
+echo "MXeneupHalf,WaterProton,MXeneloHalf" > B_name_temp #Name for each building block, you can modify
+B_num=(64,38,48) # Number of atoms in each building blcoks (corresbonding to the name of each building block), you can modify
 B_name_t=(`echo $(grep "," B_name_temp)`)
 B_name=`echo ${B_name_t[@]} | sed 's/,/","/g'`
-B_num=(64,38,48)
-
 rm B_name_temp
-#we ge the elecment and the num of atoms inside the CONTCAR
+
+#Obtain the Elecment & Number of atoms inside CONTCAR
 sed '1,5d' CONTCAR > temp_CON_1
 sed '2,$d' temp_CON_1 > elem
 sed '1,6d' CONTCAR > temp_CON_2
 sed '2,$d' temp_CON_2 > num
-
 rm *temp_CON*
 
-#Total Atom number
+#The combined total atom Number
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' num`
 Element_t=(`echo $(grep " " elem)`)
 Ele_num_t=(`echo $(grep " " num)`)
 Element=`echo ${Element_t[@]} | sed 's/[ ][ ]*/","/g'`
 Ele_num=`echo ${Ele_num_t[@]} | sed 's/[ ][ ]*/,/g'`
-
 rm elem num
-#################################################
-#Python get the right element order
-#################################################
+
+#############################################################################
+#Python obtain the Right Order of the Element and corresponding info in File#
+#############################################################################
 cat << EOF > Right_element_order_one.py
+
 import numpy as np
 import math
 
@@ -70,10 +72,15 @@ for a in range(0,len_num_ele):
 
 np.savetxt("right_ele_order", Right_element_order, fmt="%s", delimiter='  ')
 np.savetxt("right_chg_order", electron_chg_order, fmt="%s", delimiter='  ')
+
 EOF
-#################################################
-#End of the first python file
-#################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python Right_element_order_one.py > First_py.log
 
 paste right_ele_order right_chg_order > ele_chg
@@ -82,24 +89,23 @@ rm right_ele_order right_chg_order Right_element_order_one.py
 sed "1,2d" ACF.dat > Coor_CHG
 for((i=1;i<=4;i++)); 
 do 
-sed -i '$d' Coor_CHG 
+  sed -i '$d' Coor_CHG 
 done 
 
 awk '{printf("%4d %15.8f %15.8f %15.8f %15.8f\n",$1, $2, $3, $4, $5)}' Coor_CHG > Coor_CHG_order
-
 paste ele_chg Coor_CHG_order > ele_coor_chg_temp
 rm Coor_CHG Coor_CHG_order ele_chg
 
-#Next we need to get the exact charge
+#We need to get Exact charge value for each atom
 awk '{printf("%4s %4s %15.8f %15.8f %15.8f %15.8f\n", $3, $1, $2 - $7, $4, $5, $6);}' ele_coor_chg_temp > ele_coor_chg
 sort -n -k6 ele_coor_chg > ele_coor_chg_as
 rm ele_coor_chg_temp ele_coor_chg
 
-
-#################################################
-#Python bader charge analysis
-#################################################
+#######################################################
+#Python Bader Calculation on Different Building Blocks#
+#######################################################
 cat << EOF > bader_charge_analysis_building_blocks.py
+
 import numpy as np
 import math
 
@@ -125,13 +131,15 @@ for nn in range(0,num_Build):
     charge_sum_file[nn]=charge_sum
 
 np.savetxt("Charge_building_block_temp", charge_sum_file, fmt="%s", delimiter='  ')
+
 EOF
-#################################################
-#End of the second python file
-#################################################
-python bader_charge_analysis_building_blocks.py > Second_py.log
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
+python bader_charge_analysis_building_blocks.py > Result_py.log
 awk '{printf("%15.8f\n",$1)}' Charge_building_block_temp > Charge_building_block
-
 rm bader_charge_analysis_building_blocks.py ele_coor_chg_as Charge_building_block_temp
-
-

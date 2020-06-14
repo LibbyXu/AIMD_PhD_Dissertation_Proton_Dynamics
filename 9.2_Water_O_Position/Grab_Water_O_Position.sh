@@ -1,7 +1,7 @@
 # Combined the Water-O positions fpr every step along the whole trajectories
 # We need two files file: final_pos_WO from the 9.1_RDF_Water_O, and POSCAR from 2_Split_Manually_Data_Processing
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Some data preparations

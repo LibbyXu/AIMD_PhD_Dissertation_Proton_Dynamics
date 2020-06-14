@@ -1,7 +1,7 @@
 #Extracting the positions for H and protons at interfaces.  
 #We need two files: POSCAR, XDATCAR from 2_Split_Manually_Data_Processing
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables

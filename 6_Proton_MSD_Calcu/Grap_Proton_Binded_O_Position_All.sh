@@ -1,7 +1,7 @@
 #This is used to grap the xyz coordinate postitions of the protn-bonded O each step.
 #We need three files: [POSCAR, XDATCAR] from 2_Split_Manually_Data_Processing, Final_proton_bonded_O_reorder_list_Final from 4_Reordering_O_H_List
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables

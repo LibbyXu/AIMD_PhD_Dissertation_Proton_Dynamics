@@ -1,7 +1,7 @@
 #Calculating surface redox rate constant
 #We need the Final_proton_bonded_O_reorder_list_Final from 4_Reording_O_Proton_H_List
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #######################################  
