@@ -1,39 +1,49 @@
-#we will explore teh polarization and the direction of the OH in water in this script
-#So, we need three files in order to process all the things, the first is the WO_position, corres_O_W_num_second, final_H_list_step_second
+#We calculate the OH orientation for water molecules.
+#We need three files: WO_position from previous Separate_1, [corres_O_W_num_second, final_H_list_step_second] from the previous data processing script "Data_processes_Corres_H_Posiitons_First".
+
+#load Python3 environment
 module load python/3.6.0
 
-#Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
-degree_for_all=`echo 45`
-Water_layer_num=`echo 1`
-#Water_layer_thikness=`echo 10`
+##Definition of variables
+##Number of the protons
+total_proton_num=`echo 2` #You can modify 
 
-#The x y position for the area for calculating the area
-AxisOxy=(12.1003999709999999,0.0000000000000000)
-AxisTxy=(-6.0494949460000003,10.4798920380999991)
-AxisRxy=(0.0000000000000000,0.0000000000000000)
+##The separate degrees
+degree_for_all=`echo 45` #You can modify 
 
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+#The x y position for the area for calculating the area (from lattice constants)
+AxisOxy=(10.0,0.0) #You can modify 
+AxisTxy=(-5.0,10.0) #You can modify 
+AxisRxy=(0.0,0.0) #You can modify 
+
+##The O index from Water 
+##If the indexes have an order
+WO_St=`echo 65` #You can modify 
+WO_En=`echo 76` #You can modify 
+interger_WO=`echo 1` #You can modify 
 echo "${WO_St}" >> index_WO_temp
-for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
+for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(65,68,71,72,74)
 
+##Some other parameters needed to be set
 total_water_num=`echo ${WO_En}'-'${WO_St}'+'1 | bc`
+##This script applied only for the system with 1 interface
+Water_layer_num=`echo 1`
 
 #######################################################################
-# Python file to get direction and the degree
-# positive down; negative up
+#Python file to get direction and the degree
+#positive down; negative up
 #######################################################################
 cat << EOF > Python_polarization_OH_water.py
+
 import numpy as np
 import math
 
