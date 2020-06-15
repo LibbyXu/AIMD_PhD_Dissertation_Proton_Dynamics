@@ -1,37 +1,39 @@
-# We need the proton files from the 12 index folder
-# separate surface, water, total average time
-#load the needed Python environment
+#Separate surface, water, total average binding time
+#We need files: proton_id_# folder from 12_Proton_Remaining_Time
+
+#load Python3 environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+#The number of protons in the system
+total_proton_num=`echo 2`  #You can modify.
 
 for ((ii=1;ii<=${total_proton_num};ii++))
 do
-cd proton_id_${ii}
-cp Final_Surface_proton_time_period Final_Surface_proton_time_period_${ii}
-cp Final_Total_proton_time_period Final_Total_proton_time_period_${ii}
-cp Final_Water_proton_time_period Final_Water_proton_time_period_${ii}
-mv Final_Surface_proton_time_period_${ii} ../
-mv Final_Total_proton_time_period_${ii} ../
-mv Final_Water_proton_time_period_${ii} ../
-cd ..
-sed -i '$d' Final_Total_proton_time_period_${ii}
+  cd proton_id_${ii}
+  cp Final_Surface_proton_time_period Final_Surface_proton_time_period_${ii}
+  cp Final_Total_proton_time_period Final_Total_proton_time_period_${ii}
+  cp Final_Water_proton_time_period Final_Water_proton_time_period_${ii}
+  mv Final_Surface_proton_time_period_${ii} ../
+  mv Final_Total_proton_time_period_${ii} ../
+  mv Final_Water_proton_time_period_${ii} ../
+  cd ..
+  sed -i '$d' Final_Total_proton_time_period_${ii}
 done
 
 touch Total_whole_time_binding
 touch Water_whole_time_binding
 touch Surface_whole_time_binding
+
 for ((i=1;i<=${total_proton_num};i++))
 do
-cat Total_whole_time_binding  Final_Total_proton_time_period_${i} > Total_whole_time_binding_temp
-cat Water_whole_time_binding Final_Water_proton_time_period_${i} > Water_whole_time_binding_temp
-cat Surface_whole_time_binding Final_Surface_proton_time_period_${i} > Surface_whole_time_binding_temp
-mv Total_whole_time_binding_temp Total_whole_time_binding
-mv Water_whole_time_binding_temp Water_whole_time_binding
-mv Surface_whole_time_binding_temp Surface_whole_time_binding
-rm -r proton_id_${i}
+  cat Total_whole_time_binding  Final_Total_proton_time_period_${i} > Total_whole_time_binding_temp
+  cat Water_whole_time_binding Final_Water_proton_time_period_${i} > Water_whole_time_binding_temp
+  cat Surface_whole_time_binding Final_Surface_proton_time_period_${i} > Surface_whole_time_binding_temp
+  mv Total_whole_time_binding_temp Total_whole_time_binding
+  mv Water_whole_time_binding_temp Water_whole_time_binding
+  mv Surface_whole_time_binding_temp Surface_whole_time_binding
+  rm -r proton_id_${i}
 done
 
 rm *Final_Surface_proton_time_period_*
@@ -50,11 +52,11 @@ rm Total_whole_time_binding Total_whole_time_binding_final
 rm Water_whole_time_binding Water_whole_time_binding_final
 rm Surface_whole_time_binding Surface_whole_time_binding_final
 
-#######################################################################
-# Python Average binding time, Total, Surface, Water
-#######################################################################
+#####################################################
+#Python, Average binding time, Total, Surface, Water#
+#####################################################
 cat << EOF > Ave_binding_time_total_surface_water.py
-#load the needed python environment
+
 import numpy as np
 import math
 
@@ -109,13 +111,12 @@ elif len_Surface==0:
     print('The average water time: {}'.format(Average_Water_time))
 
 EOF
-#######################################################################
-# End of the python file
-#######################################################################
+################### 
+#End of the python# 
+################### 
+
+#############################
+#Linux data processing codes#
+#############################
 python Ave_binding_time_total_surface_water.py > python.log
 rm Ave_binding_time_total_surface_water.py
-
-
-
-
-

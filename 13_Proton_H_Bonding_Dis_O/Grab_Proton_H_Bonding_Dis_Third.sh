@@ -1,6 +1,6 @@
 # We need files: Final_hydronium_O_corr from Ratio_OH_Water_in_H2O_No_Hydro_2_1 in 11_Possibility_OH_Bond_Alinement, [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing
 
-# load needed environment
+#load Python3 environment
 module load python/3.6.0
 
 #Definition of variables
