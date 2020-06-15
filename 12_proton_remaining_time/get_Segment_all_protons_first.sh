@@ -1,54 +1,61 @@
-#Get the segment for different proton within the trajectory
-#The whole and then separated to surface O and water O
-#All three parts (whole,surface,water) will be remaining here
+#Get the segment for different proton when it is binding with the same O within the trajectory
+#The whole, surface O, water O will be examined
+#We need files: Final_proton_bonded_O_reorder_list_Final from 4_Reordering_O_H_List
 
-#load the pyrhon3 environment
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
-#Define the index num for the O in water and Surface, if your index has an order
-SO_St=`echo 33`
-SO_En=`echo 64`
-interger_SO=`echo 1`
+#The number of protons in the system
+total_proton_num=`echo 2`  #You can modify.
+
+##The O index from Surface
+##If the indexes have an order
+SO_St=`echo 30`  #You can modify.
+SO_En=`echo 65`  #You can modify.
+interger_SO=`echo 1`  #You can modify.
 echo "${SO_St}" >> index_SO_temp
-for ((i=${SO_St}+${interger_SO}; i<=${SO_En}; i+=${interger_SO}))   #i+
+for ((i=${SO_St}+${interger_SO}; i<=${SO_En}; i+=${interger_SO}))
 do
-echo ",$i" >> index_SO_temp
+  echo ",$i" >> index_SO_temp
 done
 cat index_SO_temp | xargs > index_SO
 SO_temp=(`echo $(grep "," index_SO)`)
 SurfaceO=`echo ${SO_temp[@]} | sed 's/ //g'`
 rm index_SO index_SO_temp
+##If the index does not have an order
 #SurfaceO=(83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113)
 
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+##The O index from water 
+##If the indexes have an order
+WO_St=`echo 69`  #You can modify.
+WO_En=`echo 72`  #You can modify.
+interger_WO=`echo 1`  #You can modify.
 echo "${WO_St}" >> index_WO_temp
-for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
+for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113)
 
 for ((i=1;i<=${total_proton_num};i++))
 do
-mkdir proton_id_${i}
-awk '{printf("%8d %6d\n"),$1,$('${i}'+1)}' Final_O_uporder_list_Final > temp_time_proton_${i}
-mv temp_time_proton_${i} proton_id_${i}
-cd proton_id_${i}
-mv temp_time_proton_${i} time_proton
-cd ..
+  mkdir proton_id_${i}
+  awk '{printf("%8d %6d\n"),$1,$('${i}'+1)}' Final_proton_bonded_O_reorder_list_Final > temp_time_proton_${i}
+  mv temp_time_proton_${i} proton_id_${i}
+  cd proton_id_${i}
+  mv temp_time_proton_${i} time_proton
+  cd ..
 done
 
-#######################################################################
-# get the time segment for different protons in traj 
-#######################################################################
+############################################################
+#Python, get the time segment for different protons in traj#
+############################################################
 cat << EOF > Python_get_time_seg_proton_one.py
 # Writing script to get the timeperiod that the proton will bind to the smae O
 # The O here no matter it is from water or from the surface O from the MXene
@@ -59,7 +66,7 @@ num_protons=${total_proton_num}
 Surface_O_index=[${SurfaceO[@]}]
 Water_O_index=[${WaterO[@]}]
 
-# load the data file
+#load the data file
 data_pro_t_idx=np.genfromtxt('time_proton', delimiter='')
 len_total=len(data_pro_t_idx)
 
@@ -114,30 +121,24 @@ np.savetxt('Water_proton_time_period', water_O_TP, fmt="%s", delimiter='   ')
 np.savetxt('Surface_proton_time_period', surface_O_TP, fmt="%s", delimiter='   ')
 
 EOF
-#######################################################################
-# First Python script end
-#######################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 for ((ii=1;ii<=${total_proton_num};ii++))
 do
-cp Python_get_time_seg_proton_one.py proton_id_${ii}
-cd proton_id_${ii}
-python Python_get_time_seg_proton_one.py > proton_id_${ii}.log
-rm Python_get_time_seg_proton_one.py
-awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Total_proton_time_period > Final_Total_proton_time_period
-awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Water_proton_time_period > Final_Water_proton_time_period
-awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Surface_proton_time_period > Final_Surface_proton_time_period
-rm Total_proton_time_period Water_proton_time_period Surface_proton_time_period
-cd ..
+  cp Python_get_time_seg_proton_one.py proton_id_${ii}
+  cd proton_id_${ii}
+  python Python_get_time_seg_proton_one.py > proton_id_${ii}.log
+  rm Python_get_time_seg_proton_one.py
+  awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Total_proton_time_period > Final_Total_proton_time_period
+  awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Water_proton_time_period > Final_Water_proton_time_period
+  awk '{printf("%8d %6d %6d\n",$1,$2,$3)}' Surface_proton_time_period > Final_Surface_proton_time_period
+  rm Total_proton_time_period Water_proton_time_period Surface_proton_time_period
+  cd ..
 done
 
 rm Python_get_time_seg_proton_one.py
-
-
-
-
-
-
-
-
-
-

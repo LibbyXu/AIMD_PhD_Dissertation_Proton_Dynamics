@@ -1,58 +1,58 @@
-# Separated all of the traj to the proton
-# First put the 15000 at the last line
-#load the pyrhon3 environment
+#Separated all of the traj to the proton
+
+#load the Python3 environment
 module load python/3.6.0
 
-#the resulted file:
-#the first column, total value;
-#the second column, water layer value
-#the third column, surface layer value
-#Some initial parameters
-total_proton_num=`echo 2`
+#Definition of variables
+#The number of protons in the system
+total_proton_num=`echo 2`  #You can modify.
 
 for ((o=1;o<=${total_proton_num};o++))
 do
-cd proton_id_${o}
-#echo "   15000      0      0" >> Final_Surface_proton_time_period
-echo "   15000      0      0" >> Final_Total_proton_time_period
-#echo "   15000      0      0" >> Final_Water_proton_time_period
-cd ..
+   cd proton_id_${o}
+   #echo "   15000      0      0" >> Final_Surface_proton_time_period   #You can modify 15000
+   echo "   15000      0      0" >> Final_Total_proton_time_period   #You can modify 15000
+   #echo "   15000      0      0" >> Final_Water_proton_time_period   #You can modify 15000
+   cd ..
 done
 
-#Define the index num for the O in water and Surface, if your index has an order
-SO_St=`echo 33`
-SO_En=`echo 64`
-interger_SO=`echo 1`
+##The O index from Surface
+##If the indexes have an order
+SO_St=`echo 33`  #You can modify.
+SO_En=`echo 64`  #You can modify.
+interger_SO=`echo 1`  #You can modify.
 echo "${SO_St}" >> index_SO_temp
 for ((i=${SO_St}+${interger_SO}; i<=${SO_En}; i+=${interger_SO}))   #i+
 do
-echo ",$i" >> index_SO_temp
+  echo ",$i" >> index_SO_temp
 done
 cat index_SO_temp | xargs > index_SO
 SO_temp=(`echo $(grep "," index_SO)`)
 SurfaceO=`echo ${SO_temp[@]} | sed 's/ //g'`
 rm index_SO index_SO_temp
+##If the index does not have an order
 #SurfaceO=(83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113)
 
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+##The O index from Water
+##If the indexes have an order
+WO_St=`echo 65`  #You can modify.
+WO_En=`echo 76`  #You can modify.
+interger_WO=`echo 1`  #You can modify.
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(83,85,87,93,95,97,99,05,107,113)
 
-
-
-
-#######################################################################
-# get integrated along the time 
-#######################################################################
+#######################################
+#Python, get integrated along the time#
+#######################################
 cat << EOF > get_integration.py
 # obtain the integrations
 # load the right environments
@@ -129,21 +129,22 @@ print("The relaxation time for this proton surface is {}".format(relax_time_surf
 
 np.savetxt('result_total_integration_temp', result_total, fmt="%s", delimiter='   ')
 EOF
-#######################################################################
-# end of the python file
-#######################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 for ((pp=1;pp<=${total_proton_num};pp++))
 do
-cp get_integration.py proton_id_${pp}
-cd proton_id_${pp}
-python get_integration.py >> proton_id_${pp}.log
-awk '{printf("%8d %15.8f %15.8f %15.8f\n",$1,$2,$3,$4)}' result_total_integration_temp > result_total_integration
-rm result_total_integration_temp
-rm get_integration.py
-cd ..
+  cp get_integration.py proton_id_${pp}
+  cd proton_id_${pp}
+  python get_integration.py >> proton_id_${pp}.log
+  awk '{printf("%8d %15.8f %15.8f %15.8f\n",$1,$2,$3,$4)}' result_total_integration_temp > result_total_integration
+  rm result_total_integration_temp
+  rm get_integration.py
+  cd ..
 done
 
 rm get_integration.py
-
-
-
