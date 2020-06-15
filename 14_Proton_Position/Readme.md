@@ -6,7 +6,7 @@
 
 **i)** **`Submit.run`**: Linux submit file
 
-**ii)** **`Grap_Proton_and_H_in_Water.sh`**: The data processing script for obtaining the positions of all protons within interfaces the whole trajectories.
+**ii)** **`Grap_Proton_Position.sh`**: The data processing script for obtaining the positions of all protons within interfaces the whole trajectories.
 
 ## About Outputs
 
@@ -22,7 +22,7 @@
 
 #### Scripts & submit files: 
 
-**`Grap_Proton_and_H_in_Water.sh, Submit.run`**.
+**`Grap_Proton_Position.sh, Submit.run`**.
 
 **We need to modify one parameter in** **`Submit.run`**.
 
@@ -31,7 +31,7 @@
 needed_step=`echo 15000` #You can modify 
 ```
 
-**We also need to modify some parameters in** **`Grap_Proton_and_H_in_Water.sh`**.
+**We also need to modify some parameters in** **`Grap_Proton_Position.sh`**.
 
 ```javascript
 #Definition of variables

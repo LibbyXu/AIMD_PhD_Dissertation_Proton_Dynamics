@@ -1,20 +1,31 @@
-#We need three files, the Final_Proton_index_corres from 14, the XDATCAR and POSCAR from 2
+#Grap the proton positions
+#We need three files: Final_Proton_index_corres from 14_Proton_Position, [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing
 
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+##Number of the protons  
+total_proton_num=`echo 2` #You can modify
 
+#Some data preparations
+##without Selective option when doing AIMD using VASP
 sed '8,$d' POSCAR > head_POSCAR
-sed '1,7d' XDATCAR > split_XDAT
 sed '1,6d' head_POSCAR > NUMA
+##with Selective option when doing AIMD using VASP
+#sed '9,$d' POSCAR > head_XDAT
+#sed '1,6d' head_XDAT > NUMA
+
+#obtinaing the right loop files
+sed '1,7d' XDATCAR > split_XDAT
 rm XDATCAR
 
+#Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
 delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' split_XDAT
 rm NUMA head_POSCAR
+
 grep 'Direct' split_XDAT > numlines
 numline_steps=`wc -l numlines | cut -d' ' -f1`
 rm numlines
@@ -22,12 +33,11 @@ echo ${numline_steps}
 sed -i '/Direct/d' split_XDAT
 No_Dir_file=`wc -l split_XDAT | cut -d' ' -f1`
 
-
-##################################################################
-# Python for the proton index
-##################################################################
+#############################
+#Python for the proton index#
+#############################
 cat << EOF > Check_proton_corresponding_position.py
-# load right python environment
+
 import numpy as np
 import math
 
@@ -69,23 +79,12 @@ for u in range(0,total_proton_num):
 np.savetxt('Each_Proton_position', proton_pos, fmt="%s", delimiter='   ')  
 
 EOF
-##################################################################
-# End of the python file
-##################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python Check_proton_corresponding_position.py >> python.log
 rm Check_proton_corresponding_position.py split_XDAT POSCAR 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
