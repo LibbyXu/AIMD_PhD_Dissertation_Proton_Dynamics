@@ -1,10 +1,12 @@
-#We need three files, the Final_Proton_index_corres from 14, the XDATCAR and POSCAR from 2
+#Grap the proton-bonded O trajectories 
+#We need three files: Final_Proton_index_corres from 14_Proton_Position, [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing
 
+#load the Python3 environment
 module load python/3.6.0
 
 #Definition of variables
 #How many protons are studied in the system
-total_proton_num=`echo 2`
+total_proton_num=`echo 1`
 
 sed '8,$d' POSCAR > head_POSCAR
 sed '1,7d' XDATCAR > split_XDAT
@@ -22,12 +24,11 @@ echo ${numline_steps}
 sed -i '/Direct/d' split_XDAT
 No_Dir_file=`wc -l split_XDAT | cut -d' ' -f1`
 
-
-##################################################################
-# Python for the proton index
-##################################################################
+######################################
+#Python for the proton-bonded O index#
+######################################
 cat << EOF > Check_proton_corresponding_position.py
-# load right python environment
+
 import numpy as np
 import math
 
@@ -41,7 +42,7 @@ if int(numline_steps*Total_atom)!=int(No_Dir_file):
     print('The file has problems! You need to check!')
     check=check+1
 
-# 1 upper layer water layer, -1 lower water layer
+#1 upper layer water layer, -1 lower water layer
 if check==0:
     proton_O_index=np.genfromtxt('Final_Proton_index_corres', delimiter='') 
     traj_position=np.genfromtxt('split_XDAT', delimiter='')
@@ -69,23 +70,12 @@ for u in range(0,total_proton_num):
 np.savetxt('Each_Proton_binded_O_position', proton_pos, fmt="%s", delimiter='   ')  
 
 EOF
-##################################################################
-# End of the python file
-##################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python Check_proton_corresponding_position.py >> python.log
 rm Check_proton_corresponding_position.py split_XDAT POSCAR 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
