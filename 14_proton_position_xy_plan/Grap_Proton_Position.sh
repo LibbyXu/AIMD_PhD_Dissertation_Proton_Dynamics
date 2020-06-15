@@ -5,14 +5,22 @@
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+##Number of the protons  
+total_proton_num=`echo 2` #You can modify
 
+#Some data preparations
+##without Selective option when doing AIMD using VASP
 sed '8,$d' POSCAR > head_POSCAR
-sed '1,7d' XDATCAR > split_XDAT
 sed '1,6d' head_POSCAR > NUMA
+##with Selective option when doing AIMD using VASP
+#sed '9,$d' POSCAR > head_XDAT
+#sed '1,6d' head_XDAT > NUMA
+
+#obtinaing the right loop files
+sed '1,7d' XDATCAR > split_XDAT
 rm XDATCAR
 
+#Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
 delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' split_XDAT
@@ -21,15 +29,16 @@ rm NUMA head_POSCAR
 grep 'Direct' split_XDAT > numlines
 numline_steps=`wc -l numlines | cut -d' ' -f1`
 rm numlines
+
 echo ${numline_steps}
 sed -i '/Direct/d' split_XDAT
 No_Dir_file=`wc -l split_XDAT | cut -d' ' -f1`
 
-##################################################################
-# Python for the proton index
-##################################################################
+#########################
+#Python for proton index#
+#########################
 cat << EOF > Check_proton_position_files.py
-# load right python environment
+
 import numpy as np
 import math
 
@@ -70,34 +79,35 @@ if check==0:
 np.savetxt('Proton_index_corres', proton_index, fmt="%s", delimiter='   ')            
 
 EOF
-##################################################################
-# End of the python file
-##################################################################
-python Check_proton_position_files.py >> Python.log
+########################
+#End of the python file#
+########################
 
-rm Final_proton_bonded_O_nearest_three_H_list_Final Final_proton_bonded_O_reorder_list_Final
-rm Check_proton_position_files.py
+#############################
+#Linux data processing codes#
+#############################
+python Check_proton_position_files.py >> Python.log
+rm Final_proton_bonded_O_nearest_three_H_list_Final Final_proton_bonded_O_reorder_list_Final Check_proton_position_files.py
 
 awk '{printf("%6d\n",$1)}' Proton_index_corres > first_column_index
-
 touch Final_Proton_index_corres
 for ((i=1;i<=${total_proton_num};i+=1))
 do
-awk '{printf("%6d %6d %12.8f\n",$(3*('${i}'-1)+2),$(3*('${i}'-1)+3),$(3*('${i}'-1)+4))}' Proton_index_corres > temp_p
-paste Final_Proton_index_corres temp_p > Final_Proton_index_corres_temp
-mv Final_Proton_index_corres_temp Final_Proton_index_corres
-rm temp_p
+  awk '{printf("%6d %6d %12.8f\n",$(3*('${i}'-1)+2),$(3*('${i}'-1)+3),$(3*('${i}'-1)+4))}' Proton_index_corres > temp_p
+  paste Final_Proton_index_corres temp_p > Final_Proton_index_corres_temp
+  mv Final_Proton_index_corres_temp Final_Proton_index_corres
+  rm temp_p
 done
 
 paste first_column_index Final_Proton_index_corres > Final_Proton_index_corres_right
 mv Final_Proton_index_corres_right Final_Proton_index_corres
 rm first_column_index POSCAR Proton_index_corres
 
-##################################################################
-# Python for the proton position each step
-##################################################################
+##########################################
+#Python for the proton position each step#
+##########################################
 cat << EOF > Position_Protons.py
-# load needed environment
+
 import numpy as np
 import math
 
@@ -125,18 +135,15 @@ if line_file!=int(total_proton_num*len_file):
 np.savetxt('Proton_position', position_proton, fmt="%s", delimiter='   ')  
 
 EOF
-##################################################################
-# End of the python file
-##################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python Position_Protons.py  >>  Python.log
 rm Position_Protons.py
 
 awk '{printf("%8d %6d %6d %12.8f %12.8f %12.8f\n",$1,$2,$3,$4,$5,$6)}' Proton_position > Final_Proton_position
 rm Proton_position split_XDAT
-
-
-
-
-
-
-

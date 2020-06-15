@@ -1,25 +1,46 @@
-This is the scripts to get all the proton positions in xy plane.
+# Creating Proton Positions Along Trajectories
 
-##########################################################################
-The files we need here:
-XDATCAR POSCAR from 2
-Final_O_nearest_three_H_Final Final_O_uporder_list_Final from 4
+**Here, we obtain the XYZ-coordinate positions of protons within interfaces for each step along paths.** 
 
-##########################################################################
-The parameters we need to modify:
-grap_proton_position_first.sh
+## Main Scripts & Functions
+
+**i)** **`Submit.run`**: Linux submit file
+
+**ii)** **`Grap_Proton_and_H_in_Water.sh`**: The data processing script for obtaining the positions of all protons within interfaces the whole trajectories.
+
+## About Outputs
+
+**i)** **`Final_Proton_position`**: The combined XYZ-position file for proton (index, proton-bonded O index) along paths. 
+
+**ii)** **`Final_Proton_index_corres`**: The distance between the proton and proton-bonded O.
+
+## Processing Scripts
+
+#### Files/folders needed to be put into the current folder before typing commands:
+
+**`XDATCAR, POSCAR`** from **`2_Split_Manually_Data_Processing`**, **`Final_proton_bonded_O_reorder_list_Final, Final_proton_bonded_O_nearest_three_H_list_Final`** from **`4_Reordering_O_H_List`**
+
+#### Scripts & submit files: 
+
+**`Grap_Proton_and_H_in_Water.sh, Submit.run`**.
+
+**We need to modify one parameter in** **`Submit.run`**.
+
+```javascript
+#The number of the last steps that will be needed in your data analysis
+needed_step=`echo 15000` #You can modify 
+```
+
+**We also need to modify some parameters in** **`Grap_Proton_and_H_in_Water.sh`**.
+
+```javascript
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+##Number of the protons  
+total_proton_num=`echo 2` #You can modify
+```
 
-Submit_first.run
-#The former steps we need to cut from our SDATCAR file
-needed_step=`echo 15000`   
+****
 
-##########################################################################
-sbatch Submit_first.run
+**Typing the command**: **`sbatch Submit.run`** 
 
-
-
-
-
+****
