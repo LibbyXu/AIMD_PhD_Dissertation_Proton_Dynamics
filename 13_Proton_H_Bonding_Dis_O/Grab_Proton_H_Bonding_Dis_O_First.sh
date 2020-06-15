@@ -1,31 +1,44 @@
-# the fiels we need are Final_hydronium_O_corr and XDATCAR and POSCAR
+# We need files: Final_hydronium_O_corr from Ratio_OH_Water_in_H2O_No_Hydro_2_1 in 11_Possibility_OH_Bond_Alinement, [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing
+
 # load needed environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
+#The number of protons in the system
 total_proton_num=`echo 2`
 
-#Define the index num for the O in water and Surface, if your index has certain
+#Definition of variables
+##The O index from water 
+##If the indexes have an order
 WO_St=`echo 65`
 WO_En=`echo 76`
 interger_WO=`echo 1`
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 IFS=', ' read -r -a num_WO <<< "${WaterO[@]}"
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113)
 
-sed '8,$d' POSCAR > head_POSCAR
-sed '1,7d' XDATCAR > split_XDAT
-sed '1,6d' head_POSCAR > NUMA
-rm XDATCAR
+#Some data preparations
+##without Selective option when doing AIMD using VASP
+sed '8,$d' POSCAR > head_XDATCAR
+sed '1,6d' head_XDATCAR > NUMA
+##with Selective option when doing AIMD using VASP
+#sed '9,$d' POSCAR > head_XDAT
+#sed '1,6d' head_XDAT > NUMA
 
+#obtinaing the right loop files
+sed '1,7d' XDATCAR > XDATCAR_final
+rm XDATCAR POSCAR
+
+#Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
 delet_line=`echo '('${num_atoms}'+'1')*'5000 | bc`
 sed -i '1,'${delet_line}'d' split_XDAT
@@ -38,14 +51,13 @@ rm numlines
 echo ${numline_steps}
 rm split_XDAT
 
-###################################################################
-# Python for the proton in water corresponding each step
-###################################################################
+##############
+#Python codes#
+##############
 cat << EOF > Proton_water_corresponding_each_step.py
-# load right python environment
+
 import numpy as np
 import math
-
 
 water_proton_data = np.genfromtxt('Final_hydronium_O_corr', delimiter='')
 num_WO = ${#num_WO[@]}
@@ -79,10 +91,15 @@ for iiii in range(0,line_row):
         print('The H distance order does not match at the step {}'.format(iiii+1))
 
 np.savetxt('data_proton_in_water_selection_temp', data_proton_waterL, fmt="%s", delimiter='   ')
+
 EOF
-###################################################################
-# End of the python file
-###################################################################
+################### 
+#End of the python# 
+################### 
+
+#############################
+#Linux data processing codes#
+#############################
 python Proton_water_corresponding_each_step.py >> First_python.log
 rm Proton_water_corresponding_each_step.py
 
@@ -92,12 +109,3 @@ rm data_proton_in_water_selection_temp
 awk '{printf("%8d %6d %12.8f\n", $1,$6,$7)}' data_proton_in_water_selection > data_proton_in_water_exact
 awk '{printf("%8d %6d %12.8f\n", $1,$6,$7)}' data_proton_in_water_selection > temp
 rm Final_hydronium_O_corr
-
-
-
-
-
-
-
-
-
