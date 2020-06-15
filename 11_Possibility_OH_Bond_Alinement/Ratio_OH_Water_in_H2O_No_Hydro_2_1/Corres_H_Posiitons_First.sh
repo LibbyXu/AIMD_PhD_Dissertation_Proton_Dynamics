@@ -1,32 +1,39 @@
-#We need three file: Final_O_uporder_list_Final, WOH_position, WO_position
+#Pre-data processing script
+#We need three files: [WOH_position, WO_position] from previous Separate_1 folder, Final_proton_bonded_O_reorder_list_Final from 4_Reordering_O_H_List folder
 
-#For each step in trajectory, how many H atoms does that has?
+#load Python3 environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+##Number of the protons
+total_proton_num=`echo 2` #You can modify 
 
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+##The O index from Water 
+##If the indexes have an order
+WO_St=`echo 65` #You can modify
+WO_En=`echo 76` #You can modify
+interger_WO=`echo 1` #You can modify
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(65,68,71,72,74)
 
 total_water_num=`echo ${WO_En}'-'${WO_St}'+'1 | bc`
 total_H_num=`echo ${total_water_num}'*'2'+'${total_proton_num} | bc`
 
-#######################################################################
-# Python file to count the number of the H bonding to the O in water (inclduing the bprotons) for each step
-#######################################################################
+##############################################
+#Python, count number of H bonding to water-O#
+#(inclduing the protons) for each step########
+##############################################
 cat << EOF > Python_NUM_H_AND_positioni_First.py
+
 import numpy as np
 import math
 
@@ -66,22 +73,24 @@ elif int(proton_num_whole)==0:
         data_OH_bonding_each_step[pb,-1] = total_step*2
 
 np.savetxt('PWOH_bonding_each_step_first', data_OH_bonding_each_step, fmt="%s", delimiter='   ')
-EOF
-#######################################################################
-#First Python script end
-#######################################################################
 
-#######################################################################
-#At the same time, create the list of the H positions for each step
-#######################################################################
+EOF
+##########################  
+###End of Python script###  
+##########################  
+
+##################################
+#Create H positions for each step#
+##################################
 cat << EOF > Python_H_Position_each_step_second.py
+
 import numpy as np
 import math
 
 total_step=${total_water_num}
 proton_num_whole=${total_proton_num}
 
-# loading the dataset
+#loading the dataset
 data_H_list = np.genfromtxt('WOH_position', delimiter='')
 num_each_step = np.genfromtxt('final_PWOH_bonding_each_step_first', delimiter='')
 each_WO_position = np.genfromtxt('WO_position', delimiter='')
@@ -146,12 +155,14 @@ for ffa in range(0,length_data):
         print("The Proton num doesn't match each other in step {}!".format(ffa+1))
 
 EOF
-#######################################################################
-#Second Python script end
-#######################################################################
+##########################  
+###End of Python script###  
+########################## 
 
-#######################################################################
-#######################################################################
+################  
+#Linux commands#  
+################ 
+#Perform the first Python script
 python Python_NUM_H_AND_positioni_First.py >> Python_first.log
 rm Python_NUM_H_AND_positioni_First.py
 
@@ -159,22 +170,17 @@ total_column=`echo ${total_proton_num}'+'3 | bc`
 touch final_PWOH_bonding_each_step_first
 for ((s=1; s<=${total_column}; s++))
 do
-awk '{printf("%5d\n",$('${s}'))}' PWOH_bonding_each_step_first > temp
-paste final_PWOH_bonding_each_step_first temp > final_PWOH_bonding_each_step_first_temp
-mv final_PWOH_bonding_each_step_first_temp final_PWOH_bonding_each_step_first
+  awk '{printf("%5d\n",$('${s}'))}' PWOH_bonding_each_step_first > temp
+  paste final_PWOH_bonding_each_step_first temp > final_PWOH_bonding_each_step_first_temp
+  mv final_PWOH_bonding_each_step_first_temp final_PWOH_bonding_each_step_first
 done
 rm PWOH_bonding_each_step_first temp
 
-#######################################################################
-########################################################################
+#Perform the second Python script 
 python Python_H_Position_each_step_second.py >> Python_first.log
 rm Python_H_Position_each_step_second.py
 
 awk '{printf("%5d %15.8f %15.8f %15.8f %15.8f %5d %15.8f %15.8f %15.8f %15.8f\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$10)}' H_list_step_second > final_H_list_step_second
 awk '{printf("%5d %15.8f %15.8f %15.8f %15.8f %5d %15.8f %15.8f %15.8f %15.8f %5d %15.8f %15.8f %15.8f %15.8f\n",$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)}' hydronium_O_corresponding > Final_hydronium_O_corr 
 
-rm H_list_step_second hydronium_O_corresponding
-
-rm WOH_position Final_O_uporder_list_Final
-
-
+rm H_list_step_second hydronium_O_corresponding WOH_position Final_O_uporder_list_Final

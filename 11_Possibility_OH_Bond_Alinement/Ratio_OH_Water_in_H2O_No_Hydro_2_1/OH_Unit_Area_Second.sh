@@ -1,38 +1,49 @@
-#we will explore teh polarization and the direction of the OH in water in this script
-#So, we need three files in order to process all the things, the first is the WO_position, corres_O_W_num_second, final_H_list_step_second
+#We calculate the OH orientation for water molecules.
+#We need three files: WO_position from previous Separate_1, [corres_O_W_num_second, final_H_list_step_second] from the previous data processing script "Data_processes_Corres_H_Posiitons_First".
+
+#load Python3 environment
 module load python/3.6.0
 
-#Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
-degree_for_all=`echo 45`
-Water_layer_num=`echo 1`
+##Definition of variables
+##Number of the protons
+total_proton_num=`echo 2` #You can modify 
 
-#The x y position for the area for calculating the area
-AxisOxy=(12.1003999709999999,0.0000000000000000)
-AxisTxy=(-6.0494949460000003,10.4798920380999991)
-AxisRxy=(0.0000000000000000,0.0000000000000000)
+##The separate degrees
+degree_for_all=`echo 45` #You can modify 
 
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+#The x y position for the area for calculating the area (from lattice constants)
+AxisOxy=(10.0,0.0) #You can modify 
+AxisTxy=(-5.0,10.0) #You can modify 
+AxisRxy=(0.0,0.0) #You can modify 
+
+##The O index from Water 
+##If the indexes have an order
+WO_St=`echo 65` #You can modify 
+WO_En=`echo 76` #You can modify 
+interger_WO=`echo 1` #You can modify 
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
 do
-echo ",$i" >> index_WO_temp
+  echo ",$i" >> index_WO_temp
 done
 cat index_WO_temp | xargs > index_WO
 WO_temp=(`echo $(grep "," index_WO)`)
 WaterO=`echo ${WO_temp[@]} | sed 's/ //g'`
 rm index_WO index_WO_temp
+##If the index does not have an order
+#WaterO=(65,68,71,72,74)
 
+##Some other parameters needed to be set
 total_water_num=`echo ${WO_En}'-'${WO_St}'+'1 | bc`
+##This script applied only for the system with 1 interface
+Water_layer_num=`echo 1`
 
-#######################################################################
-# Python file to get direction and the degree
-# positive down; negative up
-#######################################################################
+###########################################
+#Python file to get directions and degrees#
+#positive down; negative up################
+###########################################
 cat << EOF > Python_polarization_OH_water.py
+
 import numpy as np
 import math
 
@@ -141,15 +152,17 @@ for d in range(0,length_all_H):
             polarization_file[d,ddd*15+14]=1
 
 np.savetxt('final_polarization_file', polarization_file, fmt="%s", delimiter='   ')
-EOF
-#######################################################################
-# Python second script end
-#######################################################################
 
-#######################################################################
-# Python file to get ratio for each area
-#######################################################################
+EOF
+############
+#Python end#
+############
+
+#################################
+#Python, get ratio for each area#
+#################################
 cat << EOF > Python_ratio_OH.py
+
 import numpy as np
 import math
 
@@ -177,21 +190,23 @@ for na in range(0,length_step):
         line_rwo=line_rwo+1
 
 np.savetxt('num_OH', results_num_OH, fmt="%s", delimiter='   ')
-EOF
-#######################################################################
-# Python second script end
-#######################################################################
 
-#######################################################################
-# finding the number of H per unit area
-#######################################################################
+EOF
+############
+#Python end#
+############
+
+############################################
+#Python, find the number of H per unit area#
+############################################
 cat << EOF > Python_OH_num_per_unitarea.py
+
 import numpy as np
 import math
 
 water_layer_num=${Water_layer_num}
 
-# load the file needed
+#load the file needed
 NUM_OH=np.genfromtxt('num_OH_${Water_layer_num}_${degree_for_all}',delimiter='')
 length_file=int(len(NUM_OH))
 
@@ -224,13 +239,16 @@ print("The averaged {} number of the OH directing towareds the O surface from MX
 print("The standard deviation {} number of the OH directing towareds the O surface from MXene\n".format(averaged_OH_PM[1,-1]))
 
 np.savetxt('final_num_OH_ratio',final_num_OH,fmt="%s", delimiter='   ')
-EOF
-#######################################################################
-# Python third script end
-#######################################################################
 
-#######################################################################
-#######################################################################
+EOF
+############
+#Python end#
+############
+
+################  
+#Linux commands#  
+################ 
+#Perform the first Python script 
 python Python_polarization_OH_water.py >> Python_second.log
 rm Python_polarization_OH_water.py
 
@@ -238,8 +256,7 @@ awk '{printf("%4d %4d %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %1
 mv final_polarization_file_temp final_polarization_file
 rm WO_position
 
-#######################################################################
-#######################################################################
+#Perform the second Python script 
 python Python_ratio_OH.py >> Python_second.log
 rm Python_ratio_OH.py
 
@@ -247,15 +264,14 @@ t_col=`echo ${Water_layer_num}'+'1 | bc`
 touch num_OH_temp
 for ((u=1; u<=${t_col};u++))
 do
-awk '{printf("%5d\n",$('${u}'))}' num_OH > temp
-paste num_OH_temp temp > final_num_OH
-mv final_num_OH num_OH_temp
+  awk '{printf("%5d\n",$('${u}'))}' num_OH > temp
+  paste num_OH_temp temp > final_num_OH
+  mv final_num_OH num_OH_temp
 done
 rm temp num_OH
 mv num_OH_temp num_OH_${Water_layer_num}_${degree_for_all}
 
-########################################################################
-########################################################################
+#Perform the third Python script 
 python Python_OH_num_per_unitarea.py >> Python_second.log
 rm Python_OH_num_per_unitarea.py
 
@@ -264,16 +280,11 @@ ttt_col=`echo ${Water_layer_num}'*'2'+'1 | bc`
 touch num_OH_ratio
 for ((u=${tt_col}; u<=${ttt_col};u++))
 do
-awk '{printf("%15.8f\n",$('${u}'))}' final_num_OH_ratio > temp
-paste num_OH_ratio temp > num_OH_ratio_temp
-mv num_OH_ratio_temp num_OH_ratio
+  awk '{printf("%15.8f\n",$('${u}'))}' final_num_OH_ratio > temp
+  paste num_OH_ratio temp > num_OH_ratio_temp
+  mv num_OH_ratio_temp num_OH_ratio
 done
 rm temp final_num_OH_ratio
 mv num_OH_ratio num_OH_ratio_${Water_layer_num}_${degree_for_all}
 paste num_OH_${Water_layer_num}_${degree_for_all} num_OH_ratio_${Water_layer_num}_${degree_for_all} > final_num_OH_ratio_${Water_layer_num}_${degree_for_all}
-rm num_OH_${Water_layer_num}_${degree_for_all} num_OH_ratio_${Water_layer_num}_${degree_for_all}
-
-
-rm final_H_list_step_second
-
-
+rm num_OH_${Water_layer_num}_${degree_for_all} num_OH_ratio_${Water_layer_num}_${degree_for_all} final_H_list_step_second
