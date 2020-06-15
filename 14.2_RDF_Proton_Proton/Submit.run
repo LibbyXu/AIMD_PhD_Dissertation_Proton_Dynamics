@@ -18,4 +18,4 @@ rm numlines
 rest_line=`echo ${numlines}'-'${needed_step} | bc`
 echo ${rest_line}
 
-./Proton_Traj_RDF.sh > LOG
+./Proton_Traj_RDF.sh ${rest_line} > LOG

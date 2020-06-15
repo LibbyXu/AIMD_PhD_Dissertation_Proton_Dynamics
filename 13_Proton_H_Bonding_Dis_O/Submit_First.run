@@ -9,4 +9,12 @@
 
 #module load python/3.6.0
 
-./Grab_Proton_H_Bonding_Dis_O_First.sh > LOG_1
+#The number of the last steps that will be needed in your data analysis
+needed_step=`echo 15000` #You can modify 
+echo ${needed_step}
+grep "Direct" XDATCAR > numlines
+numlines=`wc -l numlines | cut -d' ' -f1`
+rm numlines
+rest_line=`echo ${numlines}'-'${needed_step} | bc`
+
+./Grab_Proton_H_Bonding_Dis_O_First.sh ${rest_line} > LOG_1

@@ -5,14 +5,13 @@ module load python/3.6.0
 
 #Definition of variables
 #The number of protons in the system
-total_proton_num=`echo 2`
+total_proton_num=`echo 2`  #You can modify.
 
-#Definition of variables
 ##The O index from water 
 ##If the indexes have an order
-WO_St=`echo 65`
-WO_En=`echo 76`
-interger_WO=`echo 1`
+WO_St=`echo 65`  #You can modify.
+WO_En=`echo 76`  #You can modify.
+interger_WO=`echo 1`  #You can modify.
 echo "${WO_St}" >> index_WO_temp
 for ((i=${WO_St}+${interger_WO}; i<=${WO_En}; i+=${interger_WO}))   #i+
 do
@@ -40,7 +39,7 @@ rm XDATCAR POSCAR
 
 #Obatin the last $1 of steps
 num_atoms=`awk '{ for(i=1;i<=NF;i++) sum+=$i; print sum}' NUMA`
-delet_line=`echo '('${num_atoms}'+'1')*'5000 | bc`
+delet_line=`echo '('${num_atoms}'+'1')*'$1 | bc`
 sed -i '1,'${delet_line}'d' split_XDAT
 cat head_POSCAR split_XDAT > XDATCAR
 rm NUMA head_POSCAR

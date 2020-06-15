@@ -18,5 +18,4 @@ rm numlines
 rest_line=`echo ${numlines}'-'${needed_step} | bc`
 echo ${rest_line}
 
-
 ./Grap_Proton_Position.sh ${rest_line} >> LOG

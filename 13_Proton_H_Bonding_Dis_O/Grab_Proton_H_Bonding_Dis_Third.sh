@@ -1,13 +1,13 @@
-#!/bin/bash
-# the fiels we need are Final_hydronium_O_corr and XDATCAR and POSCAR
+# We need files: Final_hydronium_O_corr from Ratio_OH_Water_in_H2O_No_Hydro_2_1 in 11_Possibility_OH_Bond_Alinement, [XDATCAR, POSCAR] from 2_Split_Manually_Data_Processing
+
 # load needed environment
 module load python/3.6.0
 
 #Definition of variables
-#How many protons are studied in the system
-total_proton_num=`echo 2`
+#The number of protons in the system
+total_proton_num=`echo 2`  #You can modify.
 
-# reading file into arrays
+#Reading file into arrays
 numline_file=`wc -l Final_Proton_binded_O_two_list | cut -d' ' -f1`
 
 rm XDATCAR POSCAR
@@ -17,11 +17,11 @@ paste index Final_Proton_binded_O_two_list > Final_Proton_binded_O_two_list_temp
 rm Final_Proton_binded_O_two_list index
 mv Final_Proton_binded_O_two_list_temp Final_Proton_binded_O_two_list
 
-###################################################################
-# Python for proton nearest O water
-###################################################################
+################################
+#Python, proton nearest O water#
+################################
 cat << EOF > Python_real_script_only_water_layer.py
-# load needed python environment
+
 import numpy as np
 import math
 
@@ -60,17 +60,16 @@ if real_row != previou_len:
 np.savetxt('real_proton',real_proton_H_boding, fmt="%s", delimiter='   ')
 
 EOF
-###################################################################
-# End of the python file
-###################################################################
+########################
+#End of the python file#
+########################
+
+#############################
+#Linux data processing codes#
+#############################
 python Python_real_script_only_water_layer.py > Third_python.log
 rm Python_real_script_only_water_layer.py
 
 awk '{printf("%6d %6d %6d %12.8f %6d\n",$1,$2,$3,$4,$5)}' real_proton > Final_real_proton_H_bonding_distance
 rm real_proton
 sort -n -k 4 Final_real_proton_H_bonding_distance > Sorted_Final_real_proton_H_bonding_distance
-
-
-
-
-
